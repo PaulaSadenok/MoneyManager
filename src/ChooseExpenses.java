@@ -2,87 +2,77 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
-public class ChooseExpenses{
+public class ChooseExpenses {
 
-    public static void printExpensesByCategory(ArrayList<Expense> expenses, String category) {
-        System.out.println("Expenses for Category: " + category);
-        boolean found = false;
+    public static ArrayList<Expense> sortExpensesByCategory(ArrayList<Expense> expenses, String category) {
+        ArrayList<Expense> sortedExpenses = new ArrayList<>();
         for (Expense expense : expenses) {
             if (expense.getCategory().equalsIgnoreCase(category)) {
-                System.out.println(expense);
-                found = true;
+                sortedExpenses.add(expense);
             }
         }
-        if (!found) {
-            System.out.println("No expenses found for category: " + category);
-        }
+        return sortedExpenses;
     }
 
-    public static void printExpensesUnderAmount(ArrayList<Expense> expenses, double maxAmount) {
-        System.out.println("Expenses under " + maxAmount + ":");
-        boolean found = false;
+    public static ArrayList<Expense> sortExpensesUnderAmount(ArrayList<Expense> expenses, double maxAmount) {
+        ArrayList<Expense> sortedExpenses = new ArrayList<>();
         for (Expense expense : expenses) {
             if (expense.getAmount() < maxAmount) {
-                System.out.println(expense);
-                found = true;
+                sortedExpenses.add(expense);
             }
         }
-        if (!found) {
-            System.out.println("No expenses found under " + maxAmount);
-        }
+        return sortedExpenses;
     }
 
-    public static void printExpensesHigherThanAmount(ArrayList<Expense> expenses, double minAmount) {
-        System.out.println("Expenses higher than " + minAmount + ":");
-        boolean found = false;
+    public static ArrayList<Expense> sortExpensesHigherThanAmount(ArrayList<Expense> expenses, double minAmount) {
+        ArrayList<Expense> sortedExpenses = new ArrayList<>();
         for (Expense expense : expenses) {
             if (expense.getAmount() > minAmount) {
-                System.out.println(expense);
-                found = true;
+                sortedExpenses.add(expense);
             }
         }
-        if (!found) {
-            System.out.println("No expenses found higher than " + minAmount);
-        }
+        return sortedExpenses;
     }
 
-    public static void printExpensesLaterThanDate(ArrayList<Expense> expenses, String dateString) {
-        System.out.println("Expenses later than " + dateString + ":");
-        boolean found = false;
+    public static ArrayList<Expense> sortExpensesLaterThanDate(ArrayList<Expense> expenses, String dateString) {
+        ArrayList<Expense> sortedExpenses = new ArrayList<>();
         try {
             LocalDate date = LocalDate.parse(dateString);
             for (Expense expense : expenses) {
                 if (LocalDate.parse(expense.getDate()).isAfter(date)) {
-                    System.out.println(expense);
-                    found = true;
+                    sortedExpenses.add(expense);
                 }
             }
         } catch (DateTimeParseException e) {
             System.out.println("Invalid date format. Please use YYYY-MM-DD.");
-            return;
+            return sortedExpenses;
         }
-        if (!found) {
-            System.out.println("No expenses found later than " + dateString);
-        }
+        return sortedExpenses;
     }
 
-    public static void printExpensesBeforeDate(ArrayList<Expense> expenses, String dateString) {
-        System.out.println("Expenses before " + dateString + ":");
-        boolean found = false;
+    public static ArrayList<Expense> sortExpensesBeforeDate(ArrayList<Expense> expenses, String dateString) {
+        ArrayList<Expense> sortedExpenses = new ArrayList<>();
         try {
             LocalDate date = LocalDate.parse(dateString);
             for (Expense expense : expenses) {
                 if (LocalDate.parse(expense.getDate()).isBefore(date)) {
-                    System.out.println(expense);
-                    found = true;
+                    sortedExpenses.add(expense);
                 }
             }
         } catch (DateTimeParseException e) {
             System.out.println("Invalid date format. Please use YYYY-MM-DD.");
+            return sortedExpenses;
+        }
+        return sortedExpenses;
+    }
+
+    public static void printExpenses(ArrayList<Expense> expenses) {
+        if (expenses.isEmpty()) {
+            System.out.println("No expenses found.");
             return;
         }
-        if (!found) {
-            System.out.println("No expenses found before " + dateString);
+        for (Expense expense : expenses) {
+            System.out.println(expense);
         }
     }
 }

@@ -1,22 +1,27 @@
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
         Scanner scanner = new Scanner(System.in);
         ArrayList<Expense> expenses = ExpenseStorage.loadExpenses();
 
+        Collections.sort(expenses, new Comparator<Expense>() {
+            @Override
+            public int compare(Expense e1, Expense e2) {
+                return e2.getDate().compareTo(e1.getDate());
+            }
+        });
+
         while (true) {
             System.out.println("\nExpense Tracker Menu:");
             System.out.println("1. Add Expense");
-            System.out.println("2. View All Expenses");
-            System.out.println("3. View Expenses Of Specified Category");
-            System.out.println("4. View Expenses UNDER Amount");
-            System.out.println("5. View Expenses HIGHER Than Amount");
-            System.out.println("6. View Expenses LATER Than Date");
-            System.out.println("7. View Expenses BEFORE Date");
-            System.out.println("8. Exit");
+            System.out.println("2. View Expenses");
+            System.out.println("3. Delete Expense");
+            System.out.println("4. Exit");
 
             int choice = 0;
             boolean validChoice = false;
@@ -34,50 +39,24 @@ public class Main {
             switch (choice) {
                 case 1:
                     AddExpense.addExpense(scanner, expenses);
+                    Collections.sort(expenses, new Comparator<Expense>() {
+                        @Override
+                        public int compare(Expense e1, Expense e2) {
+                            return e2.getDate().compareTo(e1.getDate());
+                        }
+                    });
                     Thread.sleep(2000);
                     break;
                 case 2:
-                    if (expenses.isEmpty()) {
-                        System.out.println("No expenses recorded.");
-                    } else {
-                        System.out.println("Expenses:");
-                        for (Expense e : expenses) {
-                            System.out.println(e);
-                        }
-                        Thread.sleep(2000);
-                    }
+                    ViewExpenses.viewExpensesMenu(scanner, expenses);
                     break;
                 case 3:
-                    System.out.print("Enter category to view expenses: ");
-                    String categoryToView = scanner.next();
-                    ChooseExpenses.printExpensesByCategory(expenses, categoryToView);
+                    System.out.print("Enter the ID of the expense to delete: ");
+                    int idToDelete = scanner.nextInt();
+                    DeleteExpense.removeExpenseById(expenses, idToDelete);
                     Thread.sleep(2000);
                     break;
                 case 4:
-                    System.out.print("Enter maximum amount to view expenses under: ");
-                    double maxAmount = scanner.nextDouble();
-                    ChooseExpenses.printExpensesUnderAmount(expenses, maxAmount);
-                    Thread.sleep(2000);
-                    break;
-                case 5:
-                    System.out.print("Enter minimum amount to view expenses higher than: ");
-                    double minAmount = scanner.nextDouble();
-                    ChooseExpenses.printExpensesHigherThanAmount(expenses, minAmount);
-                    Thread.sleep(2000);
-                    break;
-                case 6:
-                    System.out.print("Enter date to view expenses later than (YYYY-MM-DD): ");
-                    String laterThanDate = scanner.next();
-                    ChooseExpenses.printExpensesLaterThanDate(expenses, laterThanDate);
-                    Thread.sleep(2000);
-                    break;
-                case 7:
-                    System.out.print("Enter date to view expenses before (YYYY-MM-DD): ");
-                    String beforeDate = scanner.next();
-                    ChooseExpenses.printExpensesBeforeDate(expenses, beforeDate);
-                    Thread.sleep(2000);
-                    break;
-                case 8:
                     System.out.println("Goodbye!");
                     return;
                 default:
