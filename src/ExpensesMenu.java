@@ -1,11 +1,45 @@
-import java.util.InputMismatchException;
-import java.util.Scanner;
-import java.util.ArrayList;
+import java.util.*;
 import  java.lang.InterruptedException;
 
-public class ViewExpenses {
+public class ExpensesMenu {
 
     public static void viewExpensesMenu(Scanner scanner, ArrayList<Expense> expenses) throws InterruptedException {
+        while (true) {
+            System.out.println("\nExpenses Menu:");
+            System.out.println("1. Add Expense");
+            System.out.println("2. View Expenses");
+            System.out.println("3. Delete Expense");
+            System.out.println("4. Back to Main Menu");
+
+            int expenseChoice = getChoice(scanner, 1, 4);
+
+            switch (expenseChoice) {
+                case 1:
+                    AddExpense.addExpense(scanner, expenses);
+                    Collections.sort(expenses, new Comparator<Expense>() {
+                        @Override
+                        public int compare(Expense e1, Expense e2) {
+                            return e2.getDate().compareTo(e1.getDate());
+                        }
+                    });
+                    Thread.sleep(2000);
+                    break;
+                case 2:
+                    viewExpenses(scanner, expenses);
+                    break;
+                case 3:
+                    System.out.print("Enter the ID of the expense to delete: ");
+                    int idToDelete = scanner.nextInt();
+                    DeleteExpense.removeExpenseById(expenses, idToDelete);
+                    Thread.sleep(2000);
+                    break;
+                case 4:
+                    return;
+            }
+        }
+    }
+
+    private static void viewExpenses(Scanner scanner, ArrayList<Expense> expenses) throws InterruptedException {
         System.out.println("\nView Expenses Menu:");
         System.out.println("1. View All Expenses");
         System.out.println("2. View expenses by category");
