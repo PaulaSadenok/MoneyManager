@@ -5,10 +5,10 @@ public class Income {
     private int id;
     private String date;
     private double amount;
-    private static ArrayList<Income> incomes = IncomeStorage.loadIncomes();
+    private static ArrayList<Income> incomes = new ArrayList<>(); 
 
-    public Income(String date, double amount) {
-        this.id = calculateNextId();
+    public Income(int id, String date, double amount) {
+        setId(id);
         setDate(date);
         setAmount(amount);
     }
@@ -17,20 +17,15 @@ public class Income {
         return id;
     }
 
-    public String getDate() {
-        return date;
-    }
-
-    public double getAmount() {
-        return amount;
-    }
-
     public void setId(int id) {
         if (id < 0) {
-            this.id = id;
-        } else {
             throw new IllegalArgumentException("Id cannot be negative.");
         }
+        this.id = id;
+    }
+
+    public String getDate() {
+        return date;
     }
 
     public void setDate(String date) {
@@ -41,6 +36,10 @@ public class Income {
         }
     }
 
+    public double getAmount() {
+        return amount;
+    }
+
     public void setAmount(double amount) {
         if (amount >= 0) {
             this.amount = amount;
@@ -49,21 +48,28 @@ public class Income {
         }
     }
 
-    private int calculateNextId() {
-        int highestId = 0;
-        for (Income income : incomes) {
-            if (income.getId() > highestId) {
-                highestId = income.getId();
-            }
-        }
-        return highestId + 1;
+    public static ArrayList<Income> getIncomes() {
+        return incomes;
     }
 
+    public static void setIncomes(ArrayList<Income> incomes) {
+        Income.incomes = incomes;
+    }
+
+    public static void addIncome(Income income) {
+        incomes.add(income);
+    }
+
+    public static void removeIncome(Income income) {
+        incomes.remove(income);
+    }
+
+    public static void clearIncomes() {
+        incomes.clear();
+    }
+
+    @Override
     public String toString() {
-        return "Income{" +
-                "id=" + id +
-                ", date=" + date +
-                ", amount=" + amount +
-                '}';
+        return "Income{" + "id=" + id + ", date='" + date + '\'' + ", amount=" + amount + '}';
     }
 }

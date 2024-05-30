@@ -1,12 +1,26 @@
-import java.util.InputMismatchException;
-import java.util.Scanner;
-import java.util.ArrayList;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.util.Collections;
 import java.util.Comparator;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Main {
+
     public static void main(String[] args) throws InterruptedException {
-        Scanner scanner = new Scanner(System.in);
+
+        JFrame frame = new JFrame("Money Manager");
+        frame.setSize(800, 600);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JPanel mainMenu = createMainMenu();
+        frame.add(mainMenu);
+        frame.setVisible(true);
 
         ArrayList<Expense> expenses = ExpenseStorage.loadExpenses();
         Collections.sort(expenses, new Comparator<Expense>() {
@@ -24,42 +38,65 @@ public class Main {
             }
         });
 
-        while (true) {
-            System.out.println("\nMain Menu:");
-            System.out.println("1. Expenses Menu");
-            System.out.println("2. Income Menu");
-            System.out.println("3. Expenses and Income Menu");
-            System.out.println("4. Exit");
+        JButton expenseButton = (JButton) mainMenu.getComponent(1);
+        expenseButton.addActionListener((ActionEvent e) -> {
+            ExpensesMenu.viewExpensesMenu(frame, mainMenu, expenses);
+        });
 
-            int choice = 0;
-            boolean validChoice = false;
-            while (!validChoice) {
-                try {
-                    System.out.print("Enter your choice: ");
-                    choice = scanner.nextInt();
-                    validChoice = true;
-                } catch (InputMismatchException e) {
-                    System.out.println("Invalid input. Please enter a number.");
-                    scanner.next();
-                }
+        JButton incomeButton = (JButton) mainMenu.getComponent(2);
+        incomeButton.addActionListener((ActionEvent e) -> {
+            IncomeMenu.viewIncomeMenu(frame, mainMenu, incomes);
+        });
+        
+        JButton bothButton = (JButton) mainMenu.getComponent(3);
+        bothButton.addActionListener((ActionEvent e) -> {
+            try {
+                CombinedMenu.viewCombinedMenu(frame, mainMenu, expenses, incomes);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
+        });
+        
+        JButton exitButton = (JButton) mainMenu.getComponent(4);
+        exitButton.addActionListener((ActionEvent e) -> {
+            System.exit(0);
+        });
+    }
 
-            switch (choice) {
-                case 1:
-                    ExpensesMenu.viewExpensesMenu(scanner, expenses);
-                    break;
-                case 2:
-                    IncomeMenu.viewIncomeMenu(scanner, incomes);
-                    break;
-                case 3:
-                    CombinedMenu.viewCombinedMenu(scanner, expenses, incomes);
-                    break;
-                case 4:
-                    System.out.println("Goodbye!");
-                    return;
-                default:
-                    System.out.println("Invalid choice. Please select from the menu.");
-            }
-        }
+    private static JPanel createMainMenu() {
+        JPanel mainMenu = new JPanel(null);
+        mainMenu.setBackground(new Color(240, 234, 214));
+        
+        JLabel titleLabel = new JLabel("Money Manager Menu");
+        titleLabel.setBounds(190, 60, 600, 150);
+        Font font = new Font("Arial", Font.PLAIN, 40);
+        titleLabel.setFont(font);
+        mainMenu.add(titleLabel);
+
+        JButton expenseButton = new JButton("Expense");
+        expenseButton.setBounds(100, 250, 250, 100);
+        expenseButton.setBackground(new Color(220, 220, 220));
+        expenseButton.setFont(new Font("Arial", Font.BOLD, 20));
+        mainMenu.add(expenseButton);
+
+        JButton incomeButton = new JButton("Income");
+        incomeButton.setBounds(450, 250, 250, 100);
+        incomeButton.setBackground(new Color(220, 220, 220));
+        incomeButton.setFont(new Font("Arial", Font.BOLD, 20));
+        mainMenu.add(incomeButton);
+
+        JButton bothButton = new JButton("Expenses and Income");
+        bothButton.setBounds(100, 400, 250, 100);
+        bothButton.setBackground(new Color(220, 220, 220));
+        bothButton.setFont(new Font("Arial", Font.BOLD, 20));
+        mainMenu.add(bothButton);
+
+        JButton exitButton = new JButton("Exit");
+        exitButton.setBounds(450, 400, 250, 100);
+        exitButton.setBackground(new Color(220, 220, 220));
+        exitButton.setFont(new Font("Arial", Font.BOLD, 20));
+        mainMenu.add(exitButton);
+
+        return mainMenu;
     }
 }

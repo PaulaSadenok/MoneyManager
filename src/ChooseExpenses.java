@@ -66,13 +66,4 @@ public class ChooseExpenses {
         return sortedExpenses;
     }
 
-    public static void printExpenses(ArrayList<Expense> expenses) {
-        if (expenses.isEmpty()) {
-            System.out.println("No expenses found.");
-            return;
-        }
-        for (Expense expense : expenses) {
-            System.out.println(expense);
-        }
-    }
 }

@@ -55,15 +55,4 @@ public class ChooseIncome {
         }
         return sortedIncomes;
     }
-
-    public static void printIncomes(ArrayList<Income> incomes) {
-        if (incomes.isEmpty()) {
-            System.out.println("No incomes found.");
-            return;
-        }
-        for (Income income : incomes) {
-            System.out.println(income);
-        }
-    }
 }
-
